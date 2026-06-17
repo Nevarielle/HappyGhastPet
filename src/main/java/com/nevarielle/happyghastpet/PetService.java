@@ -323,11 +323,14 @@ public final class PetService {
         }
         int foodLimit = feedingDailyMax(food);
         LocalDate today = LocalDate.now();
-        if (foodLimit > 0 && repository.foodUsage(pet.get().petId(), today, food.name()) >= foodLimit) {
-            messages.send(player, "feed.food-limit", "item", food.name(), "used", foodLimit, "max", foodLimit);
-            playFailedFeedEffects(player, ghast);
-            logAction(player.getName(), "feed", pet.get(), "blocked food_limit item=" + food.name());
-            return true;
+        if (foodLimit > 0) {
+            int used = repository.foodUsage(pet.get().petId(), today, food.name());
+            if (used >= foodLimit) {
+                messages.send(player, "feed.food-limit", "item", food.name(), "used", used, "max", foodLimit);
+                playFailedFeedEffects(player, ghast);
+                logAction(player.getName(), "feed", pet.get(), "blocked food_limit item=" + food.name());
+                return true;
+            }
         }
         int added = addExperience(pet.get(), exp, true);
         if (added <= 0) {
