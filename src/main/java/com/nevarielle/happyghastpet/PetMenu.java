@@ -168,6 +168,16 @@ public final class PetMenu implements Listener {
                 openPet(player, pet.petId());
             }
             case STORAGE -> storageManager.open(player, pet);
+            case HARNESS -> {
+                Optional<Material> result = service.cycleHarness(pet);
+                if (result.isEmpty()) {
+                    messages.send(player, "harness.summon-first");
+                } else {
+                    messages.send(player, "harness.changed", "color", harnessColorName(result.get()));
+                    player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.5f, 1.4f);
+                }
+                openPet(player, pet.petId());
+            }
             case RENAME -> {
                 pendingRename.put(player.getUniqueId(), pet.petId());
                 player.closeInventory();
@@ -299,6 +309,9 @@ public final class PetMenu implements Listener {
         }
         inventory.setItem(31, foodLimitsItem(pet));
         inventory.setItem(33, trustedItem(pet));
+        if (service.harnessRecolorEnabled()) {
+            setAction(inventory, holder, 42, MenuAction.HARNESS, harnessItem(pet));
+        }
         setAction(inventory, holder, 38, MenuAction.RENAME, renameItem());
         setAction(inventory, holder, 40, MenuAction.BACK, button(Material.ARROW, ChatColor.WHITE + "Назад", List.of(
                 ChatColor.GRAY + "Вернуться к списку питомцев."
@@ -392,6 +405,44 @@ public final class PetMenu implements Listener {
                 ChatColor.GRAY + "Также: Shift+ПКМ по гасту.",
                 ChatColor.GREEN + "Клик: открыть."
         ));
+    }
+
+    private ItemStack harnessItem(PetRecord pet) {
+        Material current = service.currentHarness(pet).orElse(null);
+        List<String> lore = new ArrayList<>();
+        lore.add(ChatColor.GRAY + "Сменить цвет упряжи гаста (косметика).");
+        if (current == null) {
+            lore.add(ChatColor.GRAY + "Текущий: " + ChatColor.WHITE + "питомец не призван");
+        } else if (current.isAir()) {
+            lore.add(ChatColor.GRAY + "Текущий: " + ChatColor.WHITE + "без упряжи");
+        } else {
+            lore.add(ChatColor.GRAY + "Текущий: " + ChatColor.WHITE + harnessColorName(current));
+        }
+        lore.add(ChatColor.GREEN + "Клик: следующий цвет");
+        Material icon = (current != null && !current.isAir()) ? current : Material.WHITE_HARNESS;
+        return button(icon, ChatColor.GOLD + "Цвет упряжи", lore);
+    }
+
+    private String harnessColorName(Material harness) {
+        return switch (harness) {
+            case WHITE_HARNESS -> "белая";
+            case LIGHT_GRAY_HARNESS -> "светло-серая";
+            case GRAY_HARNESS -> "серая";
+            case BLACK_HARNESS -> "чёрная";
+            case BROWN_HARNESS -> "коричневая";
+            case RED_HARNESS -> "красная";
+            case ORANGE_HARNESS -> "оранжевая";
+            case YELLOW_HARNESS -> "жёлтая";
+            case LIME_HARNESS -> "лаймовая";
+            case GREEN_HARNESS -> "зелёная";
+            case CYAN_HARNESS -> "бирюзовая";
+            case LIGHT_BLUE_HARNESS -> "голубая";
+            case BLUE_HARNESS -> "синяя";
+            case PURPLE_HARNESS -> "фиолетовая";
+            case MAGENTA_HARNESS -> "пурпурная";
+            case PINK_HARNESS -> "розовая";
+            default -> harness.name();
+        };
     }
 
     private ItemStack behaviorItem(PetRecord pet) {
@@ -577,6 +628,7 @@ public final class PetMenu implements Listener {
         UPGRADE,
         TOGGLE_IDLE_BEHAVIOR,
         STORAGE,
+        HARNESS,
         RENAME,
         BACK
     }

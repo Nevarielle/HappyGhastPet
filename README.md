@@ -15,6 +15,7 @@ A [Paper](https://papermc.io/) plugin that lets players tame and upgrade **Happy
 - **Pet inventory** — a built-in chest (27 slots by default) opened via Shift+Right-click
 - **Resurrection** — revive a dead pet using a soul campfire ritual
 - **Trust system** — share ride access with specific players
+- **Harness colours** — recolour your ghast's harness (16 colours) from the GUI, purely cosmetic
 - **Parking modes** — configurable idle behaviour after dismounting (`PARKED` / `FREEZE` / `OFF`)
 - **Persistent storage** — SQLite with automatic schema migrations and pre-migration backups
 - **Full localisation** — all player-facing messages live in `messages.yml`

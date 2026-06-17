@@ -78,6 +78,11 @@ idle:
   stop-velocity-when-idle: true
   disable-ai-when-idle: true
 
+# Упряжь питомца. Смена цвета — чисто косметика (16 цветов), на баланс не влияет.
+# Цвет хранится на самом гасте; сбрасывается на белый только при воскрешении (новый гаст).
+harness:
+  allow-recolor: true
+
 sounds:
   ambient:
     enabled: true

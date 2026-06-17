@@ -280,6 +280,10 @@ public final class PetConfig {
         return (float) plugin.getConfig().getDouble("sounds.ambient.pitch", 1.0);
     }
 
+    public boolean harnessRecolorEnabled() {
+        return plugin.getConfig().getBoolean("harness.allow-recolor", true);
+    }
+
     public World world(String name) {
         return name == null ? null : plugin.getServer().getWorld(name);
     }

@@ -11,6 +11,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.HappyGhast;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.EntityEquipment;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -28,6 +30,14 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 public final class PetService {
+    // Harness colours in a pleasant cycle order (white -> greys -> warm -> cool).
+    private static final Material[] HARNESS_COLORS = {
+            Material.WHITE_HARNESS, Material.LIGHT_GRAY_HARNESS, Material.GRAY_HARNESS, Material.BLACK_HARNESS,
+            Material.BROWN_HARNESS, Material.RED_HARNESS, Material.ORANGE_HARNESS, Material.YELLOW_HARNESS,
+            Material.LIME_HARNESS, Material.GREEN_HARNESS, Material.CYAN_HARNESS, Material.LIGHT_BLUE_HARNESS,
+            Material.BLUE_HARNESS, Material.PURPLE_HARNESS, Material.MAGENTA_HARNESS, Material.PINK_HARNESS
+    };
+
     private final HappyGhastPetPlugin plugin;
     private final PetRepository repository;
     private final PetConfig config;
@@ -515,6 +525,47 @@ public final class PetService {
         repository.save(pet);
         Bukkit.broadcast(messages.component("death.broadcast", "name", pet.name(), "owner", pet.ownerName()));
         logAction(pet.ownerName(), "death", pet, "entity died");
+    }
+
+    // ---- Harness (cosmetic) ----
+
+    public boolean harnessRecolorEnabled() {
+        return config.harnessRecolorEnabled();
+    }
+
+    /** The pet's current harness material, or empty if the pet isn't currently spawned/loaded. AIR means no harness. */
+    public Optional<Material> currentHarness(PetRecord pet) {
+        Entity entity = findEntity(pet).orElse(null);
+        if (!(entity instanceof HappyGhast ghast) || ghast.getEquipment() == null) {
+            return Optional.empty();
+        }
+        return Optional.of(ghast.getEquipment().getItem(EquipmentSlot.BODY).getType());
+    }
+
+    /** Cycle the harness to the next colour. Returns the new material, or empty if the pet isn't currently spawned. */
+    public Optional<Material> cycleHarness(PetRecord pet) {
+        Entity entity = findEntity(pet).orElse(null);
+        if (!(entity instanceof HappyGhast ghast)) {
+            return Optional.empty();
+        }
+        EntityEquipment equipment = ghast.getEquipment();
+        if (equipment == null) {
+            return Optional.empty();
+        }
+        Material current = equipment.getItem(EquipmentSlot.BODY).getType();
+        int index = -1;
+        for (int i = 0; i < HARNESS_COLORS.length; i++) {
+            if (HARNESS_COLORS[i] == current) {
+                index = i;
+                break;
+            }
+        }
+        Material next = HARNESS_COLORS[(index + 1) % HARNESS_COLORS.length];
+        equipment.setItem(EquipmentSlot.BODY, new ItemStack(next));
+        // Cosmetic only: never drop on death, so it can't be farmed by recolour-then-kill.
+        equipment.setDropChance(EquipmentSlot.BODY, 0.0f);
+        logAction(pet.ownerName(), "harness", pet, "color=" + next.name());
+        return Optional.of(next);
     }
 
     // ---- Pet storage (chest inventory) ----
