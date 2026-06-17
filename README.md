@@ -36,7 +36,7 @@ A [Paper](https://papermc.io/) plugin that lets players tame and upgrade **Happy
 1. Download the latest JAR from [Releases](../../releases).
 2. Place it in your server's `plugins/` folder.
 3. Restart the server — `config.yml` and `messages.yml` are created automatically.
-4. (Optional) Edit the generated config files and run `/gh reload`.
+4. (Optional) Edit the generated config files and run `/gh admin reload`.
 
 ---
 
@@ -58,10 +58,10 @@ Base command: `/ghastpet` (aliases: `/gh`, `/gp`, `/hgp`)
 
 | Command | Description |
 |---|---|
-| `/gh give <player>` | Assign the targeted Ghast to a player |
-| `/gh setlevel <1–15>` | Set the level of the targeted pet |
-| `/gh remove` | Remove the targeted pet record |
-| `/gh reload` | Reload config and messages without restart |
+| `/gh admin give <player>` | Spawn a tamed Ghast and assign it to an online player |
+| `/gh admin setlevel <player> <1–15>` | Set the level of that player's pet |
+| `/gh admin remove <pet_id>` | Remove a pet record by its ID |
+| `/gh admin reload` | Reload config and messages without restart |
 
 ### Permissions
 
@@ -134,7 +134,7 @@ Effects are cumulative: a level-15 pet grants Slow Falling, Speed II, Fire Resis
 ## Building from source
 
 ```bash
-git clone https://github.com/your-username/HappyGhastPet.git
+git clone https://github.com/Nevarielle/HappyGhastPet.git
 cd HappyGhastPet
 ./gradlew build          # Linux / macOS
 gradlew.bat build        # Windows
