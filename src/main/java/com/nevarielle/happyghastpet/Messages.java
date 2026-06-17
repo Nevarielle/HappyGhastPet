@@ -51,6 +51,17 @@ public final class Messages {
         target.sendMessage(component(path, placeholders));
     }
 
+    /** Send each line of a string-list message (e.g. help / onboarding). Silently does nothing if the list is empty. */
+    public void sendList(CommandSender target, String path, Object... placeholders) {
+        for (String line : config.getStringList(path)) {
+            String value = line.replace("{prefix}", config.getString("prefix", ""));
+            for (int i = 0; i + 1 < placeholders.length; i += 2) {
+                value = value.replace("{" + placeholders[i] + "}", String.valueOf(placeholders[i + 1]));
+            }
+            target.sendMessage(legacy.deserialize(value));
+        }
+    }
+
     public void actionBar(Player player, String path, Object... placeholders) {
         player.sendActionBar(component(path, placeholders));
     }

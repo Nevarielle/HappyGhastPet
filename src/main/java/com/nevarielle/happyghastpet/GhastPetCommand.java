@@ -19,7 +19,7 @@ import java.util.UUID;
 
 public final class GhastPetCommand implements CommandExecutor, TabCompleter {
     private static final List<String> PLAYER_SUBCOMMANDS = List.of(
-            "tame", "menu", "name", "trust", "untrust"
+            "tame", "menu", "name", "trust", "untrust", "help"
     );
     private static final List<String> ADMIN_SUBCOMMANDS = List.of("give", "setlevel", "remove", "reload");
 
@@ -58,6 +58,10 @@ public final class GhastPetCommand implements CommandExecutor, TabCompleter {
         try {
             if ("admin".equals(subcommand)) {
                 handleAdmin(sender, label, args);
+                return true;
+            }
+            if ("help".equals(subcommand)) {
+                messages.sendList(sender, "help.lines");
                 return true;
             }
             if (!(sender instanceof Player player)) {
@@ -120,6 +124,10 @@ public final class GhastPetCommand implements CommandExecutor, TabCompleter {
         }
         PetRecord pet = service.tame(player, ghast, name);
         messages.send(player, "tame.success", "name", pet.name(), "id", pet.petId());
+        // First-time onboarding: only when this is the player's single (first) pet.
+        if (service.petsOwnedBy(player.getUniqueId()).size() == 1) {
+            messages.sendList(player, "help.onboarding");
+        }
     }
 
     private void rename(Player player, String[] args) throws SQLException {

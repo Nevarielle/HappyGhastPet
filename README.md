@@ -53,6 +53,7 @@ Base command: `/ghastpet` (aliases: `/gh`, `/gp`, `/hgp`)
 | `/gh name <name>` | Rename your targeted pet |
 | `/gh trust <player>` | Allow another player to ride your targeted pet |
 | `/gh untrust <player>` | Revoke ride access |
+| `/gh help` | Show a quick guide to commands and pet mechanics |
 
 ### Admin commands — permission `happyghastpet.admin` (OP by default)
 
@@ -82,6 +83,7 @@ max-pets-per-player: 2        # Dead pets still occupy a slot until resurrected 
 
 experience:
   daily-limit: 150            # XP cap from feeding per calendar day
+  auto-upgrade: false         # true = pets level up automatically once they have enough XP
 
 summon:
   cooldown-seconds: 7200      # 2-hour cooldown between summons

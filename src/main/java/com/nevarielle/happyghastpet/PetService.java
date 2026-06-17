@@ -352,6 +352,13 @@ public final class PetService {
                 "exp", pet.get().exp(),
                 "daily", pet.get().dailyExp(),
                 "daily_limit", dailyLimit());
+        if (config.autoUpgrade()) {
+            while (upgrade(pet.get())) {
+                messages.send(player, "upgrade.done",
+                        "level", pet.get().level(),
+                        "improvement", improvementName(pet.get().level()));
+            }
+        }
         if (pet.get().level() < maxLevel()) {
             int required = requiredExp(pet.get().level() + 1);
             messages.send(player, "feed.to-next-level",

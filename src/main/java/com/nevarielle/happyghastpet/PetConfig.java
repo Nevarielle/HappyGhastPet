@@ -38,6 +38,11 @@ public final class PetConfig {
         return plugin.getConfig().getInt("experience.daily-limit", 150);
     }
 
+    /** When true, a pet levels up automatically as soon as it has enough exp (no manual GUI confirm). */
+    public boolean autoUpgrade() {
+        return plugin.getConfig().getBoolean("experience.auto-upgrade", false);
+    }
+
     public long summonCooldownMillis() {
         return plugin.getConfig().getLong("summon.cooldown-seconds", 7200L) * 1000L;
     }
