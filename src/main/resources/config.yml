@@ -1,0 +1,231 @@
+# HappyGhastPet configuration
+# Все тексты для игроков вынесены в messages.yml.
+
+# bStats metrics. Зарегистрируй плагин на https://bstats.org/ и укажи его id.
+# 0 = метрика выключена.
+metrics:
+  bstats-plugin-id: 0
+
+# Максимум питомцев на игрока. Погибшие питомцы тоже занимают слот,
+# пока их не воскресят или не удалит администратор.
+max-pets-per-player: 2
+
+# Дистанция луча для выбора гаста взглядом (команды name/trust и т.п.).
+target-distance: 8.0
+
+# Период фонового тика (бафы пассажирам, idle-поведение, звуки, сохранение позиции).
+tick-period-ticks: 40
+
+storage:
+  # Как часто сохранять позицию активного питомца (в тиках). Реже = меньше нагрузка на БД.
+  location-save-period-ticks: 100
+
+pet-name:
+  default: "Happy Ghast"
+  max-length: 32
+
+display:
+  # Плейсхолдеры: {name} {level} {max_level}
+  entity-name-format: "{name} &7[Ур. {level}/{max_level}]"
+  custom-name-visible: true
+
+experience:
+  # Дневной лимит опыта с кормления. Стимулирует разнообразное кормление.
+  daily-limit: 150
+
+summon:
+  # Кулдаун призыва (телепорт питомца к игроку).
+  cooldown-seconds: 7200
+  # Призыв работает, только если игрок в том же мире, что и питомец.
+  # Нельзя выдернуть гаста из обычного мира в Энд/Ад — лети к нему или проведи через портал.
+  same-world-only: true
+
+# Внутренний инвентарь-сундук питомца. Открывается Shift+ПКМ по гасту (только владелец).
+# Доступен, только если гаст жив и находится рядом. При смерти вещи выпадают из сундука.
+inventory:
+  enabled: true
+  # Количество слотов, кратно 9 (9, 18, 27, 36, 45, 54).
+  size: 27
+  # Максимальная дистанция (в блоках) до гаста, чтобы открыть сундук.
+  open-radius: 10.0
+
+resurrection:
+  required-block: SOUL_CAMPFIRE
+  block-radius: 3
+  # Жёсткий потолок радиуса, чтобы случайно не сканировать миллионы блоков.
+  max-block-radius: 8
+  items:
+    GHAST_TEAR: 4
+    GLOWSTONE_DUST: 16
+    PHANTOM_MEMBRANE: 2
+
+speed:
+  # Базовая скорость и потолок. Потолок подобран так, чтобы множители уровней
+  # применялись без обрезки (иначе лоры врут).
+  base: 0.055
+  max: 0.12
+
+idle:
+  # OFF — обычный гаст; PARKED — зависает на месте после схода; FREEZE — жёстко фиксируется.
+  mode: PARKED
+  park-after-dismount: true
+  # max-distance-from-park и return-speed работают только при disable-ai-when-idle: false.
+  max-distance-from-park: 2.0
+  return-speed: 0.15
+  stop-velocity-when-idle: true
+  disable-ai-when-idle: true
+
+sounds:
+  ambient:
+    enabled: true
+    reduction-percent: 80
+    min-cooldown-seconds: 15
+    volume: 0.7
+    pitch: 1.0
+
+feeding:
+  # Лимит на один и тот же предмет в день (если у предмета не задан daily-max-items).
+  same-food-daily-limit:
+    enabled: true
+    default-max-items: 8
+  # exp — опыт за предмет, daily-max-items — сколько таких предметов в день (0 = без лимита).
+  items:
+    SNOWBALL:
+      exp: 1
+      daily-max-items: 16
+    SWEET_BERRIES:
+      exp: 3
+      daily-max-items: 16
+    GLOW_BERRIES:
+      exp: 6
+      daily-max-items: 12
+    GLOWSTONE_DUST:
+      exp: 6
+      daily-max-items: 12
+    MAGMA_CREAM:
+      exp: 8
+      daily-max-items: 8
+    HONEY_BOTTLE:
+      exp: 10
+      daily-max-items: 8
+    BLAZE_POWDER:
+      exp: 10
+      daily-max-items: 8
+    PHANTOM_MEMBRANE:
+      exp: 15
+      daily-max-items: 6
+    ENDER_PEARL:
+      exp: 15
+      daily-max-items: 6
+    GHAST_TEAR:
+      exp: 25
+      daily-max-items: 4
+    NETHER_STAR:
+      exp: 100
+      daily-max-items: 1
+
+# Уровни. На каждом: required-exp (стоимость перехода НА этот уровень),
+# display-name (честное описание), speed-multiplier, max-health, passenger-effects.
+# Эффекты пассажирам наследуются: уровень получает все эффекты со своего и предыдущих уровней.
+# Здоровье: уровень 1 = 10 ХП, далее +2 ХП за уровень.
+levels:
+  1:
+    required-exp: 0
+    display-name: "обычный счастливый гаст"
+    speed-multiplier: 1.0
+    max-health: 10.0
+  2:
+    required-exp: 20
+    display-name: "+5% скорость"
+    speed-multiplier: 1.05
+    max-health: 12.0
+  3:
+    required-exp: 30
+    display-name: "+10% скорость"
+    speed-multiplier: 1.10
+    max-health: 14.0
+  4:
+    required-exp: 45
+    display-name: "+15% скорость, медленное падение пассажирам"
+    speed-multiplier: 1.15
+    max-health: 16.0
+    passenger-effects:
+      - type: SLOW_FALLING
+        duration-ticks: 240
+        amplifier: 0
+        period-ticks: 100
+  5:
+    required-exp: 60
+    display-name: "+20% скорость"
+    speed-multiplier: 1.20
+    max-health: 18.0
+  6:
+    required-exp: 80
+    display-name: "+25% скорость"
+    speed-multiplier: 1.25
+    max-health: 20.0
+  7:
+    required-exp: 110
+    display-name: "+30% скорость, скорость I пассажирам"
+    speed-multiplier: 1.30
+    max-health: 22.0
+    passenger-effects:
+      - type: SPEED
+        duration-ticks: 240
+        amplifier: 0
+        period-ticks: 100
+  8:
+    required-exp: 140
+    display-name: "+40% скорость"
+    speed-multiplier: 1.40
+    max-health: 24.0
+  9:
+    required-exp: 170
+    display-name: "+45% скорость, огнестойкость пассажирам"
+    speed-multiplier: 1.45
+    max-health: 26.0
+    passenger-effects:
+      - type: FIRE_RESISTANCE
+        duration-ticks: 240
+        amplifier: 0
+        period-ticks: 100
+  10:
+    required-exp: 200
+    display-name: "+55% скорость"
+    speed-multiplier: 1.55
+    max-health: 28.0
+  11:
+    required-exp: 240
+    display-name: "+60% скорость, регенерация I пассажирам"
+    speed-multiplier: 1.60
+    max-health: 30.0
+    passenger-effects:
+      - type: REGENERATION
+        duration-ticks: 240
+        amplifier: 0
+        period-ticks: 100
+  12:
+    required-exp: 280
+    display-name: "+65% скорость"
+    speed-multiplier: 1.65
+    max-health: 32.0
+  13:
+    required-exp: 330
+    display-name: "+70% скорость"
+    speed-multiplier: 1.70
+    max-health: 34.0
+  14:
+    required-exp: 380
+    display-name: "+75% скорость"
+    speed-multiplier: 1.75
+    max-health: 36.0
+  15:
+    required-exp: 450
+    display-name: "+80% скорость, скорость II пассажирам"
+    speed-multiplier: 1.80
+    max-health: 38.0
+    passenger-effects:
+      - type: SPEED
+        duration-ticks: 240
+        amplifier: 1
+        period-ticks: 100

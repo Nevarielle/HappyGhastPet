@@ -1,0 +1,104 @@
+# Все тексты для игроков. Поддерживаются цветовые коды через '&'.
+# Плейсхолдеры пишутся в фигурных скобках, например {name}, {level}.
+# {prefix} подставляет значение prefix отсюда же.
+
+prefix: "&8[&bГаст&8] &r"
+
+common:
+  no-permission: "{prefix}&cНедостаточно прав."
+  player-only: "{prefix}&cЭта команда доступна только игроку."
+  db-error: "{prefix}&cОшибка базы данных. Подробности в консоли."
+  not-your-pet: "{prefix}&cЭто не твой питомец."
+  pet-not-found: "{prefix}&cПитомец не найден. Посмотри на него или открой меню /gh."
+  pets-none: "{prefix}&7У тебя нет питомцев."
+
+tame:
+  already-pet: "{prefix}&cЭтот гаст уже является питомцем."
+  limit-reached: "{prefix}&cУ тебя уже максимум питомцев: &e{max}&c (погибшие тоже занимают слот)."
+  look-at-ghast: "{prefix}&7Посмотри на неприручённого счастливого гаста рядом."
+  success: "{prefix}&aГаст приручён: &f{name}&a. ID: &7{id}"
+
+name:
+  usage: "{prefix}&7Использование: &f/gh name <имя>"
+  empty: "{prefix}&cИмя не может быть пустым."
+  too-long: "{prefix}&cИмя слишком длинное. Максимум &e{max}&c символов."
+  changed: "{prefix}&aИмя питомца изменено на: &f{name}"
+  prompt: "{prefix}&eНапиши в чат новое имя питомца (или &fотмена&e, чтобы выйти)."
+  cancelled: "{prefix}&7Переименование отменено."
+
+trust:
+  usage: "{prefix}&7Использование: &f/gh trust <игрок>"
+  added: "{prefix}&aИгрок &f{player}&a теперь может ездить на этом питомце."
+  unknown-player: "{prefix}&cИгрок &f{player}&c ни разу не заходил на сервер."
+untrust:
+  usage: "{prefix}&7Использование: &f/gh untrust <игрок>"
+  removed: "{prefix}&aИгрок &f{player}&a больше не доверенный для этого питомца."
+
+mount:
+  denied-foreign: "{prefix}&cЭто чужой питомец."
+  db-error: "{prefix}&cОшибка базы данных при посадке на питомца."
+
+feed:
+  db-error: "{prefix}&cОшибка базы данных при кормлении."
+  food-limit: "{prefix}&7Сегодня этот предмет уже скормлен максимум раз: &e{item} ({used}/{max})&7. Дай другую еду."
+  daily-exp-reached: "{prefix}&7Дневной лимит опыта уже исчерпан."
+  gained: "{prefix}&aПолучено &e{added}&a опыта. Уровень &e{level}/{max_level}&a, опыт &e{exp}&a, за день &e{daily}/{daily_limit}&a."
+  to-next-level: "{prefix}&7До уровня &e{level}&7 нужно ещё &e{needed}&7 опыта."
+  actionbar: "&aГаст довольно гудит."
+
+summon:
+  dead: "{prefix}&cПитомец погиб. Воскреси его в меню у &e{block}&c."
+  cooldown: "{prefix}&7Призыв будет доступен через &e{time}&7."
+  other-world: "{prefix}&cПитомец сейчас в мире &e{world}&c. Призыв работает только в том же мире — долети до него или проведи через портал."
+  world-missing: "{prefix}&cМир питомца не загружен. Призыв недоступен."
+  done: "{prefix}&aПитомец призван."
+
+resurrect:
+  not-owner: "{prefix}&cВоскресить питомца может только владелец."
+  not-dead: "{prefix}&cЭтот питомец не погиб."
+  need-block: "{prefix}&cДля ритуала нужен &e{block}&c в радиусе &e{radius}&c блоков."
+  need-items: "{prefix}&cДля ритуала нужно: &e{items}&c."
+  done: "{prefix}&dРитуал завершён. Питомец снова рядом."
+  broadcast: "&d{player} воскресил питомца {name}."
+  cost-none: "ничего"
+
+death:
+  broadcast: "&cПитомец {name} игрока {owner} погиб."
+
+storage:
+  disabled: "{prefix}&cИнвентарь питомца отключён на сервере."
+  busy: "{prefix}&7Инвентарь этого питомца сейчас уже открыт."
+  dead: "{prefix}&cСундук недоступен: питомец погиб."
+  too-far: "{prefix}&7Подойди ближе к питомцу (в пределах &e{radius}&7 блоков), чтобы открыть сундук."
+  title: "Сундук: {name}"
+
+upgrade:
+  max-level: "{prefix}&7Питомец уже максимального уровня."
+  not-enough-exp: "{prefix}&cНе хватает &e{needed}&c опыта до уровня &e{level}&c."
+  done: "{prefix}&aПитомец улучшен до уровня &e{level}&a: &f{improvement}"
+  actionbar: "&aГаст радостно звенит."
+
+behavior:
+  park-on: "{prefix}&aТеперь питомец зависает на месте после схода."
+  park-off: "{prefix}&7Теперь питомец ведёт себя как обычный гаст после схода."
+
+menu:
+  db-error: "{prefix}&cОшибка базы данных при работе с меню."
+
+admin:
+  usage: "{prefix}&7Админ: &f/gh admin <give|setlevel|remove|reload>"
+  give-usage: "{prefix}&7Использование: &f/gh admin give <игрок>"
+  give-target-offline: "{prefix}&cИгрок должен быть онлайн для выдачи питомца."
+  give-done: "{prefix}&aПитомец выдан игроку &f{player}&a. ID: &7{id}"
+  setlevel-usage: "{prefix}&7Использование: &f/gh admin setlevel <игрок> <уровень>"
+  setlevel-nan: "{prefix}&cУровень должен быть числом."
+  setlevel-no-pets: "{prefix}&cУ игрока нет питомцев."
+  setlevel-done: "{prefix}&aУровень питомца &7{id}&a установлен на &e{level}&a."
+  remove-usage: "{prefix}&7Использование: &f/gh admin remove <pet_id>"
+  remove-bad-id: "{prefix}&cНекорректный pet_id."
+  remove-not-found: "{prefix}&cПитомец не найден."
+  remove-done: "{prefix}&aПитомец удалён."
+  reload-done: "{prefix}&aКонфиг перезагружен. Активные питомцы обновлены."
+
+usage:
+  player: "{prefix}&7Команды: &f/gh <tame|menu|name|trust|untrust>"

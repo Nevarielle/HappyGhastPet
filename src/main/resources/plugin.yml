@@ -1,0 +1,27 @@
+name: HappyGhastPet
+version: 1.0.0
+main: com.nevarielle.happyghastpet.HappyGhastPetPlugin
+# HappyGhast was added in 1.21.6; requires a 1.21.6+ Paper server.
+api-version: '1.21.6'
+author: Nevarielle
+description: Happy Ghasts as upgradeable player pets.
+libraries:
+  - org.xerial:sqlite-jdbc:3.46.1.0
+commands:
+  ghastpet:
+    description: Manage Happy Ghast pets.
+    usage: /gh <tame|menu|name|trust|untrust|admin>
+    aliases: [gh, gp, hgp]
+    permission: happyghastpet.use
+permissions:
+  happyghastpet.use:
+    description: Allows player pet commands.
+    default: true
+  happyghastpet.admin:
+    description: Allows admin pet commands.
+    default: op
+    children:
+      happyghastpet.use: true
+  happyghastpet.colorname:
+    description: Allows color codes in pet names.
+    default: op
